@@ -1,0 +1,214 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pauliceia</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .content-container {
+            background-color: #333333; 
+            margin: 0;
+            padding: 100px; 
+            box-sizing: border-box;
+            color: white;
+        }
+
+        main {
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-top: 5px solid orange;
+            height: 85px;
+            background-color: white;
+            border-bottom: 5px solid orange;
+        }
+
+        .wrapper_header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        
+        header img {
+            max-width: 120px;
+            margin: 0;
+        }
+
+       
+        header .navbar {
+            padding-left: 10%;
+            padding-right: 10%;
+            background: hsla(0, 0%, 100%, 0.7)!important;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa!important;
+        }
+
+        .navbar, .navbar > .container, .navbar > .container-fluid {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar {
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+
+        
+
+        nav a {
+            color: gray; 
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            color: orange; 
+        }
+
+        nav .active a {
+            color: orange; 
+        }
+
+
+       
+        nav ul {
+            text-align: center;
+        }
+
+        nav li {
+            display: inline-block;
+            padding: 5px 15px; 
+        }
+
+
+        nav li:last-child {
+            border-right: none;
+        }
+
+        .full-width-image {
+            width: 100%; 
+            height: auto; 
+            max-height: 300px;  
+            margin: 0;
+        }
+
+        .form-group {
+        margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+            text-align: left;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 250px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+        }
+
+        .form-group::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="wrapper wrapper_header">
+            <img src="http://www.pauliceia.dpi.inpe.br/portal/static/img/logo_pauliceia.0a17819.png">
+            <nav class="navbar bg-light">
+                <ul>
+                    <li class="active"><a href="{% url 'home' %}">Home</a></li> 
+                    <li class="active"><a href="{% url 'form' %}">Tabelão</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="slideshow-container">
+        <img id="mapa-image" src="{% static 'img/mapa.jpg' %}" class="full-width-image">
+    </div>
+
+    <div class="content-container">
+        <main>
+            <form method="POST" id="form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="index">Index:</label>
+                    <input type="integer" id="index" name="index">
+                </div>
+                <div class="form-group">
+                    <label for="logradouro">Logradouro:</label>
+                    <input type="text" id="logradouro" name="logradouro">
+                </div>
+                <div class="form-group">
+                    <label for="livro_emplacamento">Livros de Emplacamento:</label>
+                    <input type="text" id="livro_emplacamento" name="livro_emplacamento">
+                </div>
+                <div class="form-group">
+                    <label for="responsavel">Responsável:</label>
+                    <input type="text" id="responsavel" name="responsavel">
+                </div>
+                <div class="form-group">
+                    <label for="dt_realizacao">Data de Realização:</label>
+                    <input type="text" id="dt_realizacao" name="dt_realizacao">
+                </div>
+                <div class="form-group">
+                    <label for="observacoes">Observações:</label>
+                    <textarea id="observacoes" name="observacoes"></textarea>
+                </div>
+            
+                <button type="submit">Submit</button>
+            </form>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; Pauliceia</p>
+    </footer>
+
+    <script>
+        var images = [
+            "{% static 'img/mapa.jpg' %}",
+            "{% static 'img/mapa2.jpg' %}",
+            "{% static 'img/mapa3.jpg' %}",
+            "{% static 'img/mapa4.png' %}"
+        ];
+        var currentIndex = 0;
+        var delay = 3000; // Delay in milliseconds (1.5 seconds)
+
+        function changeImage() {
+            var mapaImage = document.getElementById('mapa-image');
+            mapaImage.src = images[currentIndex];
+            currentIndex = (currentIndex + 1) % images.length; // Increment index and wrap around to the beginning
+        }
+
+        setInterval(changeImage, delay);
+    </script>
+</body>
+</html>
