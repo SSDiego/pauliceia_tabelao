@@ -180,6 +180,49 @@
             cursor: pointer;
             width: 100%; /* Add this line to set a fixed width */
         }
+
+        table {
+            
+        border: 1px solid white;
+        width: 100%;
+        border-collapse: collapse;
+        }
+
+        th {
+            position: sticky;
+            background-color: orange;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            z-index: 1
+        }
+
+
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        
+
+        tr:nth-child(even) {
+            background-color: #333333;
+        }
+
+        .table-container {
+            height: 300px; /* Adjust the height as desired */
+            overflow-y: scroll;
+        }
+
+        .fixed-header {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            border: 2px solid white; /* Add a white border */
+            background-color: orange; /* Set the background color */
+        }
+
+
     </style>
 </head>
 <body>
@@ -203,43 +246,59 @@
 
         <div class="button-sidebar">
             <button class="button-sidebar button" onclick="location.href='{% url 'form' %}'">Formularion</button>
-            <button class="button-sidebar button" onclick="location.href='{% url 'empty' %}'">Enviar Doc</button>
+            <button class="button-sidebar button" onclick="location.href='{% url 'upload_csv' %}'">Enviar Doc</button>
             <button class="button-sidebar button" onclick="location.href='{% url 'table' %}'">Ver Dados</button>
         </div>
         
 
         <div class="content-container">
             <main>
-                <form method="POST" id="form">
-                    {% csrf_token %}
-                    
-                
-                    <div class="form-group">
-                        <label for="logradouro">Logradouro:</label>
-                        <input type="text" id="logradouro" name="logradouro">
-                    </div>
-                    <div class="form-group">
-                        <label for="livro_emplacamento">Livros de Emplacamento:</label>
-                        <input type="text" id="livro_emplacamento" name="livro_emplacamento">
-                    </div>
-                    <div class="form-group">
-                        <label for="responsavel">Responsável:</label>
-                        <input type="text" id="responsavel" name="responsavel">
-                    </div>
-                    <div class="form-group">
-                        <label for="dt_realizacao">Data de Realização:</label>
-                        <input type="date" id="id_dt_realizacao" name="dt_realizacao">
-                    </div>
-                    <div class="form-group">
-                        <label for="observacao">Observações:</label>
-                        <textarea id="observacao" name="observacao"></textarea>
-                    </div>
-                    {% csrf_token %}
-                    <button type="submit" name="submit">Enviar</button>
-                </form>
+                <div class="table-container">
+                <table>
+                    <thead>
+                        <tr class="fixed-header">
+                            <th>Logradouro</th>
+                            <th>Livro de Emplacamento</th>
+                            <th>Responsável</th>
+                            <th>Data de Realização</th>
+                            <th>Observações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for form in forms %}
+                        <tr class="{% cycle 'dark-row' 'light-row' %}">
+                            <td>{{ form.logradouro }}</td>
+                            <td>{{ form.livro_emplacamento }}</td>
+                            <td>{{ form.responsavel }}</td>
+                            <td>{{ form.dt_realizacao }}</td>
+                            <td>{{ form.observacao }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             </main>
+            <br>
+            <br>
+            <button id="download-button">Download</button>
+            <script>
+                // Function to trigger the download
+                function downloadCSV() {
+                  const link = document.createElement('a');
+                  link.href = '/download-csv';
+                  link.setAttribute('download', 'table_data.csv');
+                  link.style.display = 'none';
+            
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+            
+                // Event listener for the download button
+                const downloadButton = document.getElementById('download-button');
+                downloadButton.addEventListener('click', downloadCSV);
+              </script>
         </div>
-
     </div>
     <footer>
         <p>&copy; Pauliceia</p>

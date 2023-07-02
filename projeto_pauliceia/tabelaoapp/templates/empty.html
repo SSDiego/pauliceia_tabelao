@@ -169,7 +169,7 @@
             margin-right: 10px; /* Adjust the margin-right to your desired distance */
         }
 
-            .button-sidebar button {
+        .button-sidebar button {
             display: block;
             background-color: rgb(255, 149, 0);
             color: white;
@@ -180,6 +180,49 @@
             cursor: pointer;
             width: 100%; /* Add this line to set a fixed width */
         }
+
+        table {
+            
+        border: 1px solid white;
+        width: 100%;
+        border-collapse: collapse;
+        }
+
+        th {
+            position: sticky;
+            background-color: orange;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            z-index: 1
+        }
+
+
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        
+
+        tr:nth-child(even) {
+            background-color: #333333;
+        }
+
+        .table-container {
+            height: 300px; /* Adjust the height as desired */
+            overflow-y: scroll;
+        }
+
+        .fixed-header {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            border: 2px solid white; /* Add a white border */
+            background-color: orange; /* Set the background color */
+        }
+
+
     </style>
 </head>
 <body>
@@ -203,47 +246,80 @@
 
         <div class="button-sidebar">
             <button class="button-sidebar button" onclick="location.href='{% url 'form' %}'">Formularion</button>
-            <button class="button-sidebar button" onclick="location.href='{% url 'empty' %}'">Enviar Doc</button>
+            <button class="button-sidebar button" onclick="location.href='{% url 'upload_csv' %}'">Enviar Doc</button>
             <button class="button-sidebar button" onclick="location.href='{% url 'table' %}'">Ver Dados</button>
         </div>
         
 
         <div class="content-container">
-            <main>
-                <form method="POST" id="form">
-                    {% csrf_token %}
-                    
-                
-                    <div class="form-group">
-                        <label for="logradouro">Logradouro:</label>
-                        <input type="text" id="logradouro" name="logradouro">
-                    </div>
-                    <div class="form-group">
-                        <label for="livro_emplacamento">Livros de Emplacamento:</label>
-                        <input type="text" id="livro_emplacamento" name="livro_emplacamento">
-                    </div>
-                    <div class="form-group">
-                        <label for="responsavel">Responsável:</label>
-                        <input type="text" id="responsavel" name="responsavel">
-                    </div>
-                    <div class="form-group">
-                        <label for="dt_realizacao">Data de Realização:</label>
-                        <input type="date" id="id_dt_realizacao" name="dt_realizacao">
-                    </div>
-                    <div class="form-group">
-                        <label for="observacao">Observações:</label>
-                        <textarea id="observacao" name="observacao"></textarea>
-                    </div>
-                    {% csrf_token %}
-                    <button type="submit" name="submit">Enviar</button>
-                </form>
-            </main>
-        </div>
-
-    </div>
-    <footer>
-        <p>&copy; Pauliceia</p>
-    </footer>
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="file" id="csv-file-input" name="csv_file" accept=".csv">
+              <input type="submit" value="Enviar">
+            </form>
+          
+            <div id="csv-data-container" style="display: none;">
+              <table id="csv-table">
+                <thead>
+                  <tr id="csv-header-row"></tr>
+                </thead>
+                <tbody id="csv-data-body"></tbody>
+              </table>
+            </div>
+          </div>
+          
+          <script>
+            document.getElementById('csv-file-input').addEventListener('change', function(event) {
+              var file = event.target.files[0];
+              var reader = new FileReader();
+          
+              reader.onload = function(e) {
+                var contents = e.target.result;
+                displayCSVData(contents);
+              };
+          
+              reader.readAsText(file);
+            });
+          
+            function displayCSVData(contents) {
+              var lines = contents.split('\n');
+              var headerRow = lines[0].split(';');
+              var tableBody = lines.slice(1);
+          
+              var csvHeaderRow = document.getElementById('csv-header-row');
+              var csvDataBody = document.getElementById('csv-data-body');
+          
+              // Clear existing table rows
+              csvHeaderRow.innerHTML = '';
+              csvDataBody.innerHTML = '';
+          
+              // Add header cells
+              for (var i = 0; i < headerRow.length; i++) {
+                var cell = document.createElement('th');
+                cell.textContent = headerRow[i];
+                csvHeaderRow.appendChild(cell);
+              }
+          
+              // Add data cells
+              for (var j = 0; j < tableBody.length; j++) {
+                var row = document.createElement('tr');
+                var rowData = tableBody[j].split(';');
+          
+                for (var k = 0; k < rowData.length; k++) {
+                  var cell = document.createElement('td');
+                  cell.textContent = rowData[k];
+                  row.appendChild(cell);
+                }
+          
+                csvDataBody.appendChild(row);
+              }
+          
+              // Show the CSV data container
+              document.getElementById('csv-data-container').style.display = 'block';
+            }
+          </script>
+          
+          
 
     <script>
         var images = [
@@ -274,6 +350,8 @@
         });
     });
 </script>
-
+<footer>
+    <p>&copy; Pauliceia</p>
+</footer>
 </body>
 </html>
