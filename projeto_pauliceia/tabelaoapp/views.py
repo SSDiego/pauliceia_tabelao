@@ -19,11 +19,17 @@ def form(request):
 
             # Check if identical data already exists in the database
             if form_table.objects.filter(
+                id_da_rua=submitted_data['id_da_rua'],
+                id_ponto=submitted_data['id_ponto'],
+                metragem=submitted_data['metragem'],
                 logradouro=submitted_data['logradouro'],
-                livro_emplacamento=submitted_data['livro_emplacamento'],
-                responsavel=submitted_data['responsavel'],
-                dt_realizacao=submitted_data['dt_realizacao'],
-                observacao=submitted_data['observacao'],
+                numero=submitted_data['numero'],
+                numero_original=submitted_data['numero_original'],
+                data_inicial=submitted_data['data_inicial'],
+                data_final=submitted_data['data_final'],
+                fonte=submitted_data['fonte'],
+                autor_da_alimentacao=submitted_data['autor_da_alimentacao'],
+                data=submitted_data['data'],
             ).exists():
                 print("Identical data already exists in the database.")
             else:
@@ -60,12 +66,20 @@ def download_csv(request):
     response['Content-Disposition'] = 'attachment; filename="table_data.csv"'
     
     writer = csv.writer(response, delimiter=';')
-    writer.writerow(['Logradouro', 'Livro de Emplacamento', 'Responsável', 'Data de Realização', 'Observações'])
+    writer.writerow([
+        'ID da Rua', 'ID do Ponto', 'Metragem', 'Logradouro', 'Número', 
+        'Número Original', 'Data Inicial', 'Data Final', 'Fonte', 
+        'Autor da Alimentação', 'Data'
+    ])
 
     forms = form_table.objects.all() 
     
     for form in forms:
-        writer.writerow([form.logradouro, form.livro_emplacamento, form.responsavel, form.dt_realizacao, form.observacao])
+        writer.writerow([
+            form.id_da_rua, form.id_ponto, form.metragem, form.logradouro, 
+            form.numero, form.numero_original, form.data_inicial, form.data_final, 
+            form.fonte, form.autor_da_alimentacao, form.data
+        ])
     
     return response
 
@@ -104,25 +118,50 @@ def upload_csv(request):
         new_records = []
 
         for i, row in enumerate(csv_reader, start=1):
-            logradouro = row[0]
-            livro_emplacamento = row[1]
-            responsavel = row[2]
-            dt_realizacao = row[3]
-            observacao = row[4]
+            id_da_rua = row[0]
+            id_ponto = row[1]
+            metragem = row[2]
+            logradouro = row[3]
+            numero = row[4]
+            numero_original = row[5]
+            data_inicial = row[6]
+            data_final = row[7]
+            fonte = row[8]
+            autor_da_alimentacao = row[9]
+            data = row[10]
 
             # Check if the record already exists in the table
-            if form_table.objects.filter(logradouro=logradouro, livro_emplacamento=livro_emplacamento, responsavel=responsavel, dt_realizacao=dt_realizacao, observacao=observacao).exists():
+            if form_table.objects.filter(
+                id_da_rua=id_da_rua,
+                id_ponto=id_ponto,
+                metragem=metragem,
+                logradouro=logradouro,
+                numero=numero,
+                numero_original=numero_original,
+                data_inicial=data_inicial,
+                data_final=data_final,
+                fonte=fonte,
+                autor_da_alimentacao=autor_da_alimentacao,
+                data=data
+            ).exists():
                 existing_records.append(i)
             else:
                 obj = form_table(
+                    id_da_rua=id_da_rua,
+                    id_ponto=id_ponto,
+                    metragem=metragem,
                     logradouro=logradouro,
-                    livro_emplacamento=livro_emplacamento,
-                    responsavel=responsavel,
-                    dt_realizacao=dt_realizacao,
-                    observacao=observacao
+                    numero=numero,
+                    numero_original=numero_original,
+                    data_inicial=data_inicial,
+                    data_final=data_final,
+                    fonte=fonte,
+                    autor_da_alimentacao=autor_da_alimentacao,
+                    data=data
                 )
                 obj.save()
                 new_records.append(i)
+
 
         if existing_records:
             existing_records_msg = ', '.join(f"line {line}" for line in existing_records)

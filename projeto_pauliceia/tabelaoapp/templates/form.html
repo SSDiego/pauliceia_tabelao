@@ -202,7 +202,7 @@
     <div class="container">
 
         <div class="button-sidebar">
-            <button class="button-sidebar button" onclick="location.href='{% url 'form' %}'">Formularion</button>
+            <button class="button-sidebar button" onclick="location.href='{% url 'form' %}'">Formulario</button>
             <button class="button-sidebar button" onclick="location.href='{% url 'empty' %}'">Enviar Doc</button>
             <button class="button-sidebar button" onclick="location.href='{% url 'table' %}'">Ver Dados</button>
         </div>
@@ -215,25 +215,50 @@
                     
                 
                     <div class="form-group">
+                        <label for="id_da_rua">ID da Rua:</label>
+                        <input type="text" id="id_da_rua" name="id_da_rua">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_ponto">ID do Ponto:</label>
+                        <input type="text" id="id_ponto" name="id_ponto">
+                    </div>
+                    <div class="form-group">
+                        <label for="metragem">Metragem:</label>
+                        <input type="text" id="metragem" name="metragem">
+                    </div>
+                    <div class="form-group">
                         <label for="logradouro">Logradouro:</label>
                         <input type="text" id="logradouro" name="logradouro">
                     </div>
                     <div class="form-group">
-                        <label for="livro_emplacamento">Livros de Emplacamento:</label>
-                        <input type="text" id="livro_emplacamento" name="livro_emplacamento">
+                        <label for="numero">Número:</label>
+                        <input type="text" id="numero" name="numero">
                     </div>
                     <div class="form-group">
-                        <label for="responsavel">Responsável:</label>
-                        <input type="text" id="responsavel" name="responsavel">
+                        <label for="numero_original">Número Original:</label>
+                        <input type="text" id="numero_original" name="numero_original">
                     </div>
                     <div class="form-group">
-                        <label for="dt_realizacao">Data de Realização:</label>
-                        <input type="date" id="id_dt_realizacao" name="dt_realizacao">
+                        <label for="data_inicial">Data Inicial:</label>
+                        <input type="text" id="data_inicial" name="data_inicial">
                     </div>
                     <div class="form-group">
-                        <label for="observacao">Observações:</label>
-                        <textarea id="observacao" name="observacao"></textarea>
+                        <label for="data_final">Data Final:</label>
+                        <input type="text" id="data_final" name="data_final">
                     </div>
+                    <div class="form-group">
+                        <label for="fonte">Fonte:</label>
+                        <input type="text" id="fonte" name="fonte">
+                    </div>
+                    <div class="form-group">
+                        <label for="autor_da_alimentacao">Autor da Alimentação:</label>
+                        <input type="text" id="autor_da_alimentacao" name="autor_da_alimentacao">
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data:</label>
+                        <input type="text" id="data" name="data">
+                    </div>
+                    
                     {% csrf_token %}
                     <button type="submit" name="submit">Enviar</button>
                 </form>
