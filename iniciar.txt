@@ -1,0 +1,5 @@
+source pauliceia_env/Scripts/activate
+
+cd projeto_pauliceia
+
+python manage.py runserver
