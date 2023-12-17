@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -73,6 +73,7 @@ WSGI_APPLICATION = 'projeto_pauliceia.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# postgres://pauli_db_user:urnJjbX9OcUg8mRJeIAlEWheVTgbBCPD@dpg-clv708la73kc73bn1ehg-a.oregon-postgres.render.com/pauli_db
 
 DATABASES = {
     'default': {
@@ -86,6 +87,7 @@ DATABASES = {
 }
 
 
+DATABASES['default'] = dj_database_url.parse('postgres://pauli_db_user:urnJjbX9OcUg8mRJeIAlEWheVTgbBCPD@dpg-clv708la73kc73bn1ehg-a.oregon-postgres.render.com/pauli_db')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
