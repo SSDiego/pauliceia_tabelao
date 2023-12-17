@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import dj_database_url
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vxo604w%nzie5_98=vv68#2tp)99l6518@6xlgzhmp&xd!#d=p'
+#SECRET_KEY = 'django-insecure-vxo604w%nzie5_98=vv68#2tp)99l6518@6xlgzhmp&xd!#d=p'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
@@ -86,8 +90,8 @@ DATABASES = {
     }
 }
 
-
-DATABASES['default'] = dj_database_url.parse('postgres://pauli_db_user:urnJjbX9OcUg8mRJeIAlEWheVTgbBCPD@dpg-clv708la73kc73bn1ehg-a.oregon-postgres.render.com/pauli_db')
+database_url = os.environ.get("DATABASE_URL")
+DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
